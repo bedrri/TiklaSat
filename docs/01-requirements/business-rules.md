@@ -15,8 +15,8 @@
 Her kuralın benzersiz bir **kimliği** vardır (`BR-A-004` gibi). Bu kimlikler tesadüfi değildir:
 
 - Veritabanı şemasında ve kod içinde bu kimliğe atıf yapılır (`-- BR-A-004` yorumu).
-- `docs/02-design/traceability.md` içindeki izlenebilirlik matrisi her kuralın nerede uygulandığını gösterir.
-- Test isimleri kural kimliğini taşır (`shouldRejectBidBelowIncrement_BR_B_003`).
+- İzlenebilirlik ayrı bir matris dosyasında değil, **doğrudan uygulandığı yerde** tutulur: `docs/02-design/data-model.md`'deki kısıt tablolarında (`ck_*` sütununun yanında hangi `BR-*` kuralını uyguladığı yazar) ve `db/migration/*.sql` dosyalarındaki `COMMENT ON` satırlarında. Bir kuralın nerede uygulandığını bulmak için `grep -rn "BR-A-004" docs/ db/` yeterlidir.
+- Test isimleri kural kimliğini taşıyacak şekilde tasarlanmıştır (`shouldRejectBidBelowIncrement_BR_B_003`) — henüz kod yazılmadığı için bu, backend geliştirme aşamasında uyulacak bir isimlendirme kuralıdır.
 
 **Neden böyle yapıyoruz?** Staj savunmasında "şu kuralı nerede uyguladın?" sorusu geldiğinde tek bir grep yeterli olur. Kural kimliği olmayan bir gereksinim, unutulmaya mahkûm bir gereksinimdir.
 

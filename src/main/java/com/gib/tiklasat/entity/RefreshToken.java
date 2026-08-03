@@ -1,9 +1,13 @@
 package com.gib.tiklasat.entity;
 
+import com.gib.tiklasat.support.InetJdbcType;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.JdbcType;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import java.time.Instant;
 import java.util.UUID;
@@ -35,7 +39,8 @@ public class RefreshToken {
     private User user;
 
     /** SHA-256 hex özeti. Asla ham token saklanmaz. */
-    @Column(name = "token_hash", nullable = false, length = 64, unique = true)
+    @JdbcTypeCode(SqlTypes.CHAR)
+    @Column(name = "token_hash", length = 64, nullable = false, unique = true)
     private String tokenHash;
 
     @Column(name = "issued_at", nullable = false)
@@ -57,6 +62,7 @@ public class RefreshToken {
     @Column(name = "user_agent", length = 255)
     private String userAgent;
 
+    @JdbcType(InetJdbcType.class)
     @Column(name = "ip_address", columnDefinition = "INET")
     private String ipAddress;
 

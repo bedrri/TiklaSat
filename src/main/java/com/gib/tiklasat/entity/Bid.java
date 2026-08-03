@@ -10,10 +10,12 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import com.gib.tiklasat.support.InetJdbcType;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.JdbcType;
 
 import java.math.BigDecimal;
 import java.time.Instant;
@@ -58,6 +60,7 @@ public class Bid {
     @Column(name = "status", length = 12, nullable = false)
     private String status = "WINNING";
 
+    @JdbcType(InetJdbcType.class)
     @Column(name = "ip_address", columnDefinition = "INET")
     private String ipAddress;
 

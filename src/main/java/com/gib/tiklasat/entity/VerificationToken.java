@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import java.time.Instant;
 import java.util.UUID;
@@ -38,7 +40,8 @@ public class VerificationToken {
     @Column(name = "purpose", nullable = false, length = 24)
     private String purpose;
 
-    @Column(name = "token_hash", nullable = false, length = 64, unique = true)
+    @JdbcTypeCode(SqlTypes.CHAR)
+    @Column(name = "token_hash", length = 64, nullable = false, unique = true)
     private String tokenHash;
 
     @Column(name = "expires_at", nullable = false)

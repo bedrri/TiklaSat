@@ -1,9 +1,12 @@
 package com.gib.tiklasat.entity;
 
+import com.gib.tiklasat.support.CitextJdbcType;
+import com.gib.tiklasat.support.InetJdbcType;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.JdbcType;
 
 import java.time.Instant;
 import java.util.UUID;
@@ -31,7 +34,8 @@ public class LoginAttempt {
      * Denenen e-posta adresi. Var olmayan hesaplar için de kaydedilir,
      * bu yüzden User ilişkisi yerine String olarak tutulur.
      */
-    @Column(name = "email", nullable = false)
+    @JdbcType(CitextJdbcType.class)
+    @Column(name = "email", columnDefinition = "citext", nullable = false)
     private String email;
 
     /** Eğer e-posta geçerli bir kullanıcıya aitse onun UUID'si. */
@@ -40,6 +44,7 @@ public class LoginAttempt {
                 foreignKey = @ForeignKey(name = "fk_login_attempts_user"))
     private User user;
 
+    @JdbcType(InetJdbcType.class)
     @Column(name = "ip_address", nullable = false, columnDefinition = "INET")
     private String ipAddress;
 

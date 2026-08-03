@@ -1,5 +1,7 @@
 package com.gib.tiklasat.exception;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -18,6 +20,8 @@ import java.util.stream.Collectors;
  */
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+
+    private static final Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
     /** Validasyon hataları (ör. @NotBlank, @Email, @Size) */
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -67,9 +71,14 @@ public class GlobalExceptionHandler {
                 .body(ApiError.of(409, "CONFLICT", ex.getMessage()));
     }
 
-    /** Beklenmeyen hatalar */
+    /**
+     * Beklenmeyen hatalar.
+     * Loglanmadan yutulan bir 500, sorunu görünmez kılar — burada ERROR
+     * seviyesinde tam yığın izi (stack trace) kaydedilir.
+     */
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiError> handleGeneral(Exception ex) {
+        log.error("Beklenmeyen hata", ex);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(ApiError.of(500, "INTERNAL_ERROR",
                         "Beklenmeyen bir hata oluştu. Lütfen daha sonra tekrar deneyiniz."));

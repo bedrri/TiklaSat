@@ -59,9 +59,20 @@
 			<artifactId>flyway-database-postgresql</artifactId>
 		</dependency>
 
+		<!--
+			scope=runtime DEĞİL: CitextJdbcType/InetJdbcType (com.gib.tiklasat.support)
+			derleme zamanında org.postgresql.util.PGobject'e ihtiyaç duyuyor.
+		-->
 		<dependency>
 			<groupId>org.postgresql</groupId>
 			<artifactId>postgresql</artifactId>
+		</dependency>
+
+		<!-- Argon2PasswordEncoder (BR-S-001) çalışma zamanında BouncyCastle'a ihtiyaç duyar -->
+		<dependency>
+			<groupId>org.bouncycastle</groupId>
+			<artifactId>bcprov-jdk18on</artifactId>
+			<version>1.78.1</version>
 			<scope>runtime</scope>
 		</dependency>
 		<dependency>

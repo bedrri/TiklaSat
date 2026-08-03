@@ -10,10 +10,12 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import com.gib.tiklasat.support.InetJdbcType;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.JdbcType;
 
 import java.time.Instant;
 import java.util.UUID;
@@ -52,6 +54,7 @@ public class AuditLog {
     @Column(name = "after_state", columnDefinition = "JSONB")
     private String afterState;
 
+    @JdbcType(InetJdbcType.class)
     @Column(name = "ip_address", columnDefinition = "INET")
     private String ipAddress;
 

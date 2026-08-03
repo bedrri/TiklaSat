@@ -1,25 +1,52 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   body {
-    @apply bg-slate-50 text-slate-900 antialiased font-sans;
+    @apply bg-ink-950 text-paper font-sans antialiased;
+  }
+
+  ::selection {
+    @apply bg-gold-500 text-ink-950;
   }
 }
 
 @layer components {
+  /* Paddle butonu — asıl vurgu, açık artırmada elini kaldırmak gibi */
   .btn-primary {
-    @apply bg-brand-500 hover:bg-brand-600 text-white font-medium py-2 px-4 rounded-lg shadow-sm transition-all duration-200 active:scale-95;
+    @apply inline-flex items-center justify-center gap-2 rounded-full bg-gold-500 text-ink-950
+           font-sans font-semibold px-6 py-3 shadow-[0_8px_24px_-8px_rgba(200,154,61,0.6)]
+           transition-all duration-200 hover:bg-gold-400 hover:-translate-y-0.5
+           active:translate-y-0 active:scale-[0.98];
   }
-  
+
   .btn-outline {
-    @apply border-2 border-brand-500 text-brand-600 hover:bg-brand-50 font-medium py-2 px-4 rounded-lg transition-all duration-200 active:scale-95;
+    @apply inline-flex items-center justify-center gap-2 rounded-full border border-gold-500/50
+           text-gold-400 font-sans font-semibold px-6 py-3 transition-all duration-200
+           hover:border-gold-400 hover:bg-gold-500/10 active:scale-[0.98];
   }
-  
-  .glass-card {
-    @apply bg-white/80 backdrop-blur-md border border-white/20 shadow-xl rounded-2xl;
+
+  /* Açık artırma bileti — kağıt kesim üstünde delikli çizgi */
+  .ticket {
+    @apply relative bg-paper text-ink-950 rounded-3xl;
+    box-shadow: 0 30px 80px -20px rgba(0, 0, 0, 0.65), 0 0 0 1px rgba(0, 0, 0, 0.04);
+  }
+
+  .ticket-perforation {
+    @apply absolute left-6 right-6 top-0 h-px;
+    background-image: repeating-linear-gradient(
+      to right,
+      #d2c3a0 0 7px,
+      transparent 7px 15px
+    );
+  }
+
+  .lot-tag {
+    @apply font-mono text-xs tracking-[0.2em] uppercase text-gold-600;
+  }
+
+  .grain-overlay {
+    @apply pointer-events-none absolute inset-0 bg-grain opacity-[0.05] mix-blend-overlay;
   }
 }

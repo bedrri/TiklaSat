@@ -70,7 +70,10 @@ public class AuthService {
                 .orElseThrow(() -> new IllegalStateException("BUYER rolü bulunamadı"));
         user.getRoles().add(buyerRole);
 
-        userRepository.save(user);
+        // saveAndFlush: ID üretimi (GenerationType.UUID) bu Hibernate sürümünde
+        // satır veritabanına gerçekten yazılana kadar boş kalıyor — flush
+        // olmadan aşağıdaki user.getId() null döner.
+        user = userRepository.saveAndFlush(user);
 
         // 4. Token üret
         String roles = "BUYER";

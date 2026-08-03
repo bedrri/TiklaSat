@@ -16,7 +16,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.type.SqlTypes;
 
 import java.math.BigDecimal;
 import java.time.Instant;
@@ -62,6 +64,7 @@ public class Auction {
     @Column(name = "current_price", precision = 15, scale = 2, nullable = false)
     private BigDecimal currentPrice;
 
+    @JdbcTypeCode(SqlTypes.CHAR)
     @Column(name = "currency", length = 3, nullable = false)
     private String currency = "TRY";
 

@@ -1,72 +1,124 @@
-import React from 'react';
-import { ArrowRight, Gavel, Clock, ShieldCheck } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { ArrowRight, Gavel } from 'lucide-react';
+
+function useCountdown(initialSeconds) {
+  const [seconds, setSeconds] = useState(initialSeconds);
+
+  useEffect(() => {
+    const id = setInterval(() => {
+      setSeconds((s) => (s > 0 ? s - 1 : initialSeconds));
+    }, 1000);
+    return () => clearInterval(id);
+  }, [initialSeconds]);
+
+  const m = Math.floor(seconds / 60).toString().padStart(2, '0');
+  const s = (seconds % 60).toString().padStart(2, '0');
+  return `${m}:${s}`;
+}
+
+const STATS = [
+  { value: '120sn', label: 'Sniper koruma penceresi' },
+  { value: '<10ms', label: 'Teklif kilit süresi' },
+  { value: '%100', label: 'Admin onaylı ilan' },
+];
 
 const Hero = () => {
+  const countdown = useCountdown(97);
+
   return (
-    <div className="relative overflow-hidden bg-white">
-      {/* Background decoration */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[500px] opacity-30 pointer-events-none">
-        <div className="absolute inset-0 bg-gradient-to-r from-brand-200 to-teal-100 rounded-full blur-3xl"></div>
-      </div>
+    <section className="relative overflow-hidden">
+      <div className="grain-overlay" />
+      <div
+        className="pointer-events-none absolute inset-0"
+        style={{
+          background:
+            'radial-gradient(60% 50% at 78% 15%, rgba(200,154,61,0.14) 0%, transparent 70%)',
+        }}
+      />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-24 relative z-10">
-        <div className="text-center max-w-3xl mx-auto">
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-brand-50 text-brand-600 font-medium text-sm mb-6 border border-brand-100 shadow-sm">
-            <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-brand-500"></span>
-            </span>
-            Canlı Müzayedeler Başladı!
+      <div className="relative mx-auto max-w-7xl px-4 pb-20 pt-16 sm:px-6 lg:px-8 lg:pt-24">
+        <div className="grid items-center gap-14 lg:grid-cols-[1.15fr_0.85fr] lg:gap-10">
+          {/* Left — mesaj */}
+          <div>
+            <div className="inline-flex items-center gap-2 border-b border-ember-500/40 pb-1 font-mono text-xs uppercase tracking-[0.25em] text-ember-400">
+              <span className="relative flex h-1.5 w-1.5">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-ember-500 opacity-75" />
+                <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-ember-500" />
+              </span>
+              Canlı müzayede
+            </div>
+
+            <h1 className="mt-6 font-display text-5xl leading-[1.05] tracking-tight text-paper sm:text-6xl lg:text-[4.2rem]">
+              Son teklif,
+              <br />
+              <span className="italic text-gold-400">son saniyede</span> verilir.
+            </h1>
+
+            <p className="mt-6 max-w-lg font-sans text-lg leading-relaxed text-paper/60">
+              TıklaSat'ta her açık artırma bir yarış. Kapanışa saniyeler kala gelen
+              teklif süreyi otomatik uzatır — kimse haksız yere pas geçilmez.
+            </p>
+
+            <div className="mt-9 flex flex-col gap-3 sm:flex-row">
+              <Link to="/kayit" className="btn-primary">
+                Hemen Katıl
+                <ArrowRight size={18} />
+              </Link>
+              <Link to="/giris" className="btn-outline">
+                Giriş Yap
+              </Link>
+            </div>
+
+            <dl className="mt-14 flex flex-wrap gap-x-10 gap-y-5 border-t border-ink-700 pt-8">
+              {STATS.map((stat) => (
+                <div key={stat.label}>
+                  <dt className="font-mono text-2xl text-gold-400">{stat.value}</dt>
+                  <dd className="mt-1 font-sans text-xs text-paper/45">{stat.label}</dd>
+                </div>
+              ))}
+            </dl>
           </div>
-          
-          <h1 className="text-5xl md:text-6xl font-extrabold text-slate-900 tracking-tight leading-tight mb-6">
-            Hayalindeki Ürünü <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-500 to-teal-400">
-              Teklifinle Yakala
-            </span>
-          </h1>
-          
-          <p className="text-lg md:text-xl text-slate-500 mb-10 max-w-2xl mx-auto leading-relaxed">
-            TıklaSat, Türkiye'nin en güvenilir ve hızlı açık artırma platformudur. İstediğin ürüne teklif ver, son saniye heyecanını yaşa.
-          </p>
-          
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <button className="w-full sm:w-auto btn-primary px-8 py-3.5 text-lg flex items-center justify-center gap-2 group">
-              Müzayedeleri Keşfet
-              <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
-            </button>
-            <button className="w-full sm:w-auto btn-outline px-8 py-3.5 text-lg bg-white">
-              Hemen İlan Ver
-            </button>
+
+          {/* Right — canlı lot bileti */}
+          <div className="relative lg:justify-self-end">
+            <div className="ticket w-full max-w-sm p-6 sm:p-7">
+              <div className="ticket-perforation" />
+
+              <div className="flex items-center justify-between pt-2">
+                <span className="lot-tag">Lot № 0231</span>
+                <span className="flex items-center gap-1.5 rounded-full bg-ember-500/10 px-2.5 py-1 font-mono text-[11px] uppercase tracking-wider text-ember-600">
+                  <span className="h-1.5 w-1.5 rounded-full bg-ember-500" />
+                  Açık
+                </span>
+              </div>
+
+              <div className="mt-5 flex h-40 items-center justify-center rounded-2xl border border-ink-950/10 bg-gradient-to-br from-ink-800 to-ink-950">
+                <Gavel size={40} className="text-gold-400/70" strokeWidth={1.5} />
+              </div>
+
+              <h3 className="mt-5 font-display text-xl text-ink-950">1965 Model Kronograf Saat</h3>
+              <p className="mt-1 font-sans text-sm text-ink-950/50">28 teklif · İstanbul</p>
+
+              <div className="mt-5 flex items-end justify-between border-t border-dashed border-paper-line pt-5">
+                <div>
+                  <p className="font-sans text-[11px] uppercase tracking-wider text-ink-950/40">Güncel teklif</p>
+                  <p className="font-mono text-3xl text-ink-950">₺14.250</p>
+                </div>
+                <div className="text-right">
+                  <p className="font-sans text-[11px] uppercase tracking-wider text-ink-950/40">Kapanışa</p>
+                  <p className="font-mono text-2xl text-ember-600">{countdown}</p>
+                </div>
+              </div>
+
+              <Link to="/kayit" className="btn-primary mt-6 w-full">
+                Teklif Vermek İçin Katıl
+              </Link>
+            </div>
           </div>
         </div>
-
-        {/* Feature Highlights */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-24">
-          <div className="glass-card p-6 flex flex-col items-center text-center">
-            <div className="w-14 h-14 bg-brand-50 rounded-2xl flex items-center justify-center text-brand-500 mb-4 shadow-sm border border-brand-100">
-              <Gavel size={28} />
-            </div>
-            <h3 className="text-xl font-bold text-slate-900 mb-2">Adil Teklif Sistemi</h3>
-            <p className="text-slate-500">Milisaniyelik kilit sistemi ile teklifiniz asla çakışmaz, hakkınız yenmez.</p>
-          </div>
-          <div className="glass-card p-6 flex flex-col items-center text-center">
-            <div className="w-14 h-14 bg-rose-50 rounded-2xl flex items-center justify-center text-rose-500 mb-4 shadow-sm border border-rose-100">
-              <Clock size={28} />
-            </div>
-            <h3 className="text-xl font-bold text-slate-900 mb-2">Anti-Sniper Koruması</h3>
-            <p className="text-slate-500">Son saniye hırsızlarına son! Kapanışa yakın teklif gelirse süre uzar.</p>
-          </div>
-          <div className="glass-card p-6 flex flex-col items-center text-center">
-            <div className="w-14 h-14 bg-blue-50 rounded-2xl flex items-center justify-center text-blue-500 mb-4 shadow-sm border border-blue-100">
-              <ShieldCheck size={28} />
-            </div>
-            <h3 className="text-xl font-bold text-slate-900 mb-2">%100 Güvenli</h3>
-            <p className="text-slate-500">Admin onayından geçmeyen hiçbir ilan açık artırmaya çıkamaz.</p>
-          </div>
-        </div>
       </div>
-    </div>
+    </section>
   );
 };
 

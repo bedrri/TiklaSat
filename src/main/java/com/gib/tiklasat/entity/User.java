@@ -4,7 +4,10 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import com.gib.tiklasat.support.CitextJdbcType;
+import com.gib.tiklasat.support.InetJdbcType;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.JdbcType;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
@@ -41,7 +44,8 @@ public class User {
     // ── Kimlik ────────────────────────────────────────
 
     /** E-posta. PostgreSQL CITEXT tipi — büyük/küçük harf duyarsız (BR-U-001) */
-    @Column(name = "email", nullable = false, unique = true)
+    @JdbcType(CitextJdbcType.class)
+    @Column(name = "email", columnDefinition = "citext", nullable = false, unique = true)
     private String email;
 
     /** Argon2id hash çıktısı (BR-S-001). Asla düz metin saklanmaz. */
@@ -103,6 +107,7 @@ public class User {
     @Column(name = "consent_at")
     private Instant consentAt;
 
+    @JdbcType(InetJdbcType.class)
     @Column(name = "consent_ip", columnDefinition = "INET")
     private String consentIp;
 
